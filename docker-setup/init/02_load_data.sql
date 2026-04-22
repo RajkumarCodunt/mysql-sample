@@ -7,7 +7,7 @@ IGNORE 1 ROWS
 (@order_id, @order_date, @customer_name, @state, @city)
 SET
     order_id      = @order_id,
-    order_date    = STR_TO_DATE(@order_date, '%d-%m-%Y'),
+    order_date    = CASE WHEN @order_date = '' THEN NULL ELSE STR_TO_DATE(@order_date, '%d-%m-%Y') END,
     customer_name = @customer_name,
     state         = @state,
     city          = @city;

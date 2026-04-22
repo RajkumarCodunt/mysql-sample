@@ -15,7 +15,7 @@ services:
     volumes:
       - orders-db-data:/var/lib/mysql
       - ./init:/docker-entrypoint-initdb.d:ro
-      - ../data:/csv-data:ro
+      - ../data:/csv-data
     networks:
       - orders-net
     healthcheck:
