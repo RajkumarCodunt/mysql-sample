@@ -17,8 +17,7 @@ case "$1" in
   reload)
     echo "Reloading data..."
     docker exec -i orders-db mysql \
-      -u "${MYSQL_USER:-orders_user}" \
-      -p"${MYSQL_PASSWORD:-orders_pass}" \
+      -u root -p"${MYSQL_ROOT_PASSWORD}" \
       orders < ./init/02_load_data.sql
     echo "Done."
     ;;
@@ -27,14 +26,12 @@ case "$1" in
     ;;
   mysql)
     docker exec -it orders-db mysql \
-      -u "${MYSQL_USER:-orders_user}" \
-      -p"${MYSQL_PASSWORD:-orders_pass}" \
+      -u root -p"${MYSQL_ROOT_PASSWORD}" \
       orders
     ;;
   verify)
     docker exec -i orders-db mysql \
-      -u "${MYSQL_USER:-orders_user}" \
-      -p"${MYSQL_PASSWORD:-orders_pass}" \
+      -u root -p"${MYSQL_ROOT_PASSWORD}" \
       orders -e "
 SELECT 'orders'        AS tbl, COUNT(*) AS rows FROM orders
 UNION ALL
