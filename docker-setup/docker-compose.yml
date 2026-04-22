@@ -1,0 +1,33 @@
+services:
+  orders-db:
+    image: mysql:8.0
+    container_name: orders-db
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      MYSQL_DATABASE: orders
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "3307:3306"
+    command: --secure-file-priv=/csv-data
+    volumes:
+      - orders-db-data:/var/lib/mysql
+      - ./init:/docker-entrypoint-initdb.d:ro
+      - ../data:/csv-data:ro
+    networks:
+      - orders-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${MYSQL_USER}", "-p${MYSQL_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  orders-db-data:
+    name: orders-db-data
+
+networks:
+  orders-net:
+    name: orders-net
